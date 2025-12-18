@@ -21,13 +21,11 @@ class PersonForm(QDialog):
     def collect_data(self):
         self.data.name = self.ui.name_input.text()
         self.data.post = self.ui.post_input.text()
+        self.data.email = self.ui.email_input.text()
         if self.data.validation():
             self.accept()
         else:
             QMessageBox.warning(self, "Ошибка!", "Заполните все необходимые поля!")
-
-    def validation(self):
-        return all([self.data.name, self.data.post, self.data.phones])
 
     def append_phone(self):
         phone_number = self.ui.phone_input.text().strip()
@@ -60,6 +58,7 @@ class PersonForm(QDialog):
     def set_values(self):
         self.ui.name_input.setText(self.data.name)
         self.ui.post_input.setText(self.data.post)
+        self.ui.email_input.setText(self.data.email)
         self.update_phone_table()
 
     def open(self, data=None):

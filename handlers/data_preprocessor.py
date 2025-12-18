@@ -9,9 +9,10 @@ class DataPreprocessor:
             "full_name" : data_obj.full_name,
             "short_name" : data_obj.short_name,
             "address" : data_obj.address,
+            "email": data_obj.email,
             "phones" : data_obj.phones,
             "contacts" : [
-                {"name" : person.name, "post" : person.post, "phones" : person.phones}
+                {"name" : person.name, "post" : person.post, "email": person.email, "phones" : person.phones}
                 for person in data_obj.contacts
             ]
         }
@@ -21,7 +22,7 @@ class DataPreprocessor:
         result_map = {}
 
         for row in record:
-            org_id, full_name, short_name, address, org_phone, contact_id, name, position, contact_phones = row
+            org_id, full_name, short_name, address, email, org_phone, contact_id, name, position, contact_email, contact_phones = row
 
             if org_id not in result_map:
                 new_org = OrganizationData()
@@ -29,19 +30,25 @@ class DataPreprocessor:
                 new_org.full_name = full_name
                 new_org.short_name = short_name
                 new_org.address = address
-                new_org.phones.append(org_phone)
+                new_org.email = email
                 result_map[org_id] = new_org
+
+            existing_org = result_map[org_id]
+            if org_phone not in existing_org.phones:
+                result_map[org_id].phones.append(org_phone)
+            
+            person = next((contact for contact in existing_org.contacts if contact.contact_id == contact_id), None)
+
+            if person == None:
+                person = Person()
+                person.contact_id = contact_id
+                person.name = name
+                person.post = position
+                person.email = contact_email
+                person.phones.append(contact_phones)
+                result_map[org_id].contacts.append(person)
             else:
-                existing_org = result_map[org_id]
-                if org_phone not in existing_org.phones:
-                    existing_org.phones.append(org_phone)
-
-            if contact_id is not None:
-                new_person = Person()
-                new_person.name = name
-                new_person.post = position
-                new_person.phones.append(contact_phones)
-
-                result_map[org_id].contacts.append(new_person)
+                if contact_phones not in person.phones:
+                    person.phones.append(contact_phones)
 
         return list(result_map.values())

@@ -4,8 +4,9 @@ class OrganizationData:
         self.full_name = ""
         self.short_name = ""
         self.address = ""
+        self.email = ""
         self.phones = []
         self.contacts = []
 
     def validate(self):
-        return all([self.full_name, self.short_name, self.address, self.phones, self.contacts])
+        return all([self.full_name, self.short_name, self.address, self.email, self.phones, self.contacts])

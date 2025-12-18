@@ -34,6 +34,7 @@ class OrganizationAdd(WindowBase):
         self.data.full_name = self.ui.full_name_input.text()
         self.data.short_name = self.ui.name_input.text()
         self.data.address = self.ui.address_input.text()
+        self.data.email = self.ui.email_input.text()
 
     def append_phone(self):
         phone_number = self.ui.phone_input.text().strip()
@@ -78,12 +79,12 @@ class OrganizationAdd(WindowBase):
         for row, contact in enumerate(self.data.contacts):
             item = QTableWidgetItem(contact.name)
             self.ui.persons_table.setItem(row, 0, item)
-            delete_btn = QPushButton("Удалить")
-            delete_btn.clicked.connect(lambda _, r=row: self.delete_contact(r))
-            self.ui.persons_table.setCellWidget(row, 1, delete_btn)
             change_btn = QPushButton("Изменить")
             change_btn.clicked.connect(lambda _, r=row: self.change_contact(r))
-            self.ui.persons_table.setCellWidget(row, 2, change_btn)
+            self.ui.persons_table.setCellWidget(row, 1, change_btn)
+            delete_btn = QPushButton("Удалить")
+            delete_btn.clicked.connect(lambda _, r=row: self.delete_contact(r))
+            self.ui.persons_table.setCellWidget(row, 2, delete_btn)
 
     def delete_contact(self, row):
         contact_to_delete = self.ui.persons_table.item(row, 0).text()

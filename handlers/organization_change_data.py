@@ -16,6 +16,7 @@ class OrganizationDataChange(OrganizationAdd):
         self.ui.full_name_input.setText(self.data.full_name)
         self.ui.name_input.setText(self.data.short_name)
         self.ui.address_input.setText(self.data.address)
+        self.ui.email_input.setText(self.data.email)
         self.update_person_table()
         self.update_phone_table()
 
