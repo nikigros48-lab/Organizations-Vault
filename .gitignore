@@ -1,3 +1,4 @@
 build/
 /handlers/__pycache__/
+/ui_models/__pycache__/
 OV.spec
