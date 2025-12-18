@@ -1,7 +1,10 @@
+import os
 import sqlite3
 
 class DataBase:
-    location = "database/db.db"
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    root_dir = os.path.dirname(script_dir)
+    location = os.path.join(root_dir, 'database', 'db.db')
 
     @classmethod
     def insert_data(cls, data):
@@ -11,13 +14,14 @@ class DataBase:
             with conn:
                 cursor.execute(
                     """
-                    INSERT INTO organizations (full_name, short_name, address)
-                    VALUES (:full_name, :short_name, :address)
+                    INSERT INTO organizations (full_name, short_name, address, email)
+                    VALUES (:full_name, :short_name, :address, :email)
                     """,
                     {
                         'full_name': data['full_name'],
                         'short_name': data['short_name'],
-                        'address': data['address']
+                        'address': data['address'],
+                        'email': data['email']
                     }
                 )
 
@@ -35,10 +39,10 @@ class DataBase:
                 for contact in data['contacts']:
                     cursor.execute(
                         """
-                        INSERT INTO contacts (name, position, org_id)
-                        VALUES (:name, :position, :org_id)
+                        INSERT INTO contacts (name, position, org_id, email)
+                        VALUES (:name, :position, :org_id, :email)
                         """,
-                        {'name': contact['name'], 'position': contact['post'], 'org_id': org_id}
+                        {'name': contact['name'], 'position': contact['post'], 'org_id': org_id, 'email': contact['email']}
                     )
                     
                     contact_id = cursor.lastrowid
@@ -73,14 +77,15 @@ class DataBase:
     def _update_organization(cls, cursor, data):
         cursor.execute(
             """
-            UPDATE organizations SET full_name=:full_name, short_name=:short_name, address=:address
+            UPDATE organizations SET full_name=:full_name, short_name=:short_name, address=:address, email=:email
             WHERE org_id=:org_id
             """,
             {
                 'org_id': data['org_id'],
                 'full_name': data['full_name'],
                 'short_name': data['short_name'],
-                'address': data['address']
+                'address': data['address'],
+                'email': data['email']
             }
         )
 
@@ -102,10 +107,10 @@ class DataBase:
         for contact in data['contacts']:
             cursor.execute(
                 """
-                INSERT INTO contacts (name, position, org_id)
-                VALUES (:name, :position, :org_id)
+                INSERT INTO contacts (name, position, org_id, email)
+                VALUES (:name, :position, :org_id, :email)
                 """,
-                {'name': contact['name'], 'position': contact['post'], 'org_id': data['org_id']}
+                {'name': contact['name'], 'position': contact['post'], 'org_id': data['org_id'], 'email': data['email']}
             )
 
     @classmethod
@@ -127,8 +132,8 @@ class DataBase:
         cursor = conn.cursor()
 
         sql_query = f"""
-        SELECT o.org_id, o.full_name, o.short_name, o.address, op.phone_number AS org_phone,
-            c.contact_id, c.name, c.position, cp.phone_number AS contact_phone
+        SELECT o.org_id, o.full_name, o.short_name, o.address, o.email, op.phone_number AS org_phone,
+            c.contact_id, c.name, c.position, c.email, cp.phone_number AS contact_phone
         FROM organizations o
         LEFT JOIN organization_phones op ON o.org_id = op.org_id
         LEFT JOIN contacts c ON o.org_id = c.org_id
@@ -136,7 +141,7 @@ class DataBase:
         WHERE o.address LIKE ? OR o.full_name LIKE ? OR o.short_name LIKE ? OR c.name LIKE ?
         """
 
-        cursor.execute(sql_query, (f'%{search_text}%', f'%{search_text}%', f'%{search_text}%', f'%{search_text}%'))
+        cursor.execute(sql_query, ((f'%{search_text}%',)*4))
 
         results = cursor.fetchall()
         conn.close()
