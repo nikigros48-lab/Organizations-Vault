@@ -39,7 +39,7 @@ class DataPreprocessor:
             
             person = next((contact for contact in existing_org.contacts if contact.contact_id == contact_id), None)
 
-            if person == None:
+            if person is None:
                 person = Person()
                 person.contact_id = contact_id
                 person.name = name

@@ -1,6 +1,6 @@
+from database.database import DataBase
 from handlers.organization_add import OrganizationAdd
 from handlers.data import OrganizationData
-from handlers.database import DataBase
 from handlers.data_preprocessor import DataPreprocessor
 from PyQt6.QtWidgets import QMainWindow
 from ui_models.organization_change_data_design import Ui_MainWindow

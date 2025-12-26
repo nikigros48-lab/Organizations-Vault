@@ -1,8 +1,8 @@
+from database.database import DataBase
 from handlers.window_base import WindowBase
 from handlers.data import OrganizationData
 from handlers.person_form import PersonForm
 from handlers.data_preprocessor import DataPreprocessor
-from handlers.database import DataBase
 from handlers.person_form import PersonForm
 from PyQt6.QtWidgets import QMainWindow, QMessageBox, QTableWidgetItem, QPushButton
 from PyQt6.QtCore import QRegularExpression

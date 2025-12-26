@@ -1,5 +1,5 @@
+from database.database import DataBase
 from handlers.window_base import WindowBase
-from handlers.database import DataBase
 from handlers.data_preprocessor import DataPreprocessor
 from handlers.organization_change_data import OrganizationDataChange
 from PyQt6.QtWidgets import QDialog, QTableWidgetItem, QPushButton, QMainWindow

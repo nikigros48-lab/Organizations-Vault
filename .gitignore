@@ -1,4 +1,5 @@
 build/
-/handlers/__pycache__/
-/ui_models/__pycache__/
+__pycache__/
 OV.spec
+.vscode/
+database/db.db

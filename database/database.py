@@ -7,6 +7,57 @@ class DataBase:
     location = os.path.join(root_dir, 'database', 'db.db')
 
     @classmethod
+    def create_database(cls):
+        conn = sqlite3.connect(cls.location)
+        cursor = conn.cursor()
+
+        cursor.execute(
+        '''
+        CREATE TABLE IF NOT EXISTS organizations(
+            org_id INTEGER PRIMARY KEY,
+            full_name TEXT NOT NULL,
+            short_name TEXT NOT NULL,
+            address TEXT NOT NULL,
+            email TEXT NOT NULl
+        );
+        ''')
+
+        cursor.execute(
+        '''
+        CREATE TABLE IF NOT EXISTS organization_phones(
+            phone_id INTEGER PRIMARY KEY,
+            org_id INTEGER NOT NULL,
+            phone_number TEXT NOT NULL,
+            FOREIGN KEY (org_id) REFERENCES organizations(org_id)
+        );
+        ''')
+
+        cursor.execute(
+        '''
+        CREATE TABLE IF NOT EXISTS contacts(
+            contact_id INTEGER PRIMARY KEY,
+            name TEXT NOT NULL,
+            position TEXT NOT NULL,
+            org_id INTEGER NOT NULL,
+            email TEXT NOT NULL,
+            FOREIGN KEY (org_id) REFERENCES organizations(org_id)
+        );
+        ''')
+
+        cursor.execute(
+        '''
+        CREATE TABLE IF NOT EXISTS contact_phones(
+            phone_id INTEGER PRIMARY KEY,
+            contact_id INTEGER NOT NULL,
+            phone_number TEXT NOT NULL,
+            FOREIGN KEY (contact_id) REFERENCES contacts(contact_id)
+        );
+        ''')
+
+        conn.commit()
+        conn.close()
+
+    @classmethod
     def insert_data(cls, data):
         conn = sqlite3.connect(cls.location)
         cursor = conn.cursor()
