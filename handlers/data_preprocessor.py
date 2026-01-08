@@ -2,21 +2,7 @@ from handlers.data import OrganizationData
 from handlers.person_form import Person
 
 class DataPreprocessor:
-    @staticmethod
-    def prepare_data(data_obj):
-        return {
-            "org_id" : data_obj.org_id,
-            "full_name" : data_obj.full_name,
-            "short_name" : data_obj.short_name,
-            "address" : data_obj.address,
-            "email": data_obj.email,
-            "phones" : data_obj.phones,
-            "contacts" : [
-                {"name" : person.name, "post" : person.post, "email": person.email, "phones" : person.phones}
-                for person in data_obj.contacts
-            ]
-        }
-    
+        
     @staticmethod
     def transform_record_to_objects(record):
         result_map = {}

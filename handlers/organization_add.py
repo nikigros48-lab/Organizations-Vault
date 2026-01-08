@@ -2,7 +2,6 @@ from database.database import DataBase
 from handlers.window_base import WindowBase
 from handlers.data import OrganizationData
 from handlers.person_form import PersonForm
-from handlers.data_preprocessor import DataPreprocessor
 from handlers.person_form import PersonForm
 from PyQt6.QtWidgets import QMainWindow, QMessageBox, QTableWidgetItem, QPushButton
 from PyQt6.QtCore import QRegularExpression
@@ -39,7 +38,7 @@ class OrganizationAdd(WindowBase):
     def append_phone(self):
         phone_number = self.ui.phone_input.text().strip()
         if phone_number != "":
-            if phone_number not in self.data.phones:
+            if  self.data.phones is None or phone_number not in self.data.phones:
                 self.data.phones.append(phone_number)
                 self.ui.phone_input.setText("")
                 self.update_phone_table()
@@ -104,8 +103,7 @@ class OrganizationAdd(WindowBase):
     def organization_record(self):
         self.collect_data()
         if self.data.validate():
-            prepare_data = DataPreprocessor.prepare_data(self.data)
-            DataBase.insert_data(prepare_data)
+            DataBase.insert_data(self.data)
             QMessageBox.information(self.window, "Успех!", "Организация добавлена!")
             self.close()
         else:

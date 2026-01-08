@@ -29,7 +29,7 @@ class OrganizationDataChange(OrganizationAdd):
     def close(self):
         self.collect_data()
         if self.data.validate():
-            DataBase.update_data(DataPreprocessor.prepare_data(self.data))
+            DataBase.update_data(self.data)
         super().close()
 
     
