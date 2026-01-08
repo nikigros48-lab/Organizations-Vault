@@ -1,0 +1,5 @@
+build/
+__pycache__/
+OV.spec
+.vscode/
+database/db.db
